@@ -1,0 +1,4 @@
+phidata==2.7.6
+streamlit==1.39.0
+google-generativeai==0.7.2
+duckduckgo_search==7.1.1
