@@ -4,8 +4,8 @@ from phi.model.google import Gemini
 from phi.tools.duckduckgo import DuckDuckGo
 from google.generativeai import upload_file, get_file
 import google.generativeai as genai
-import time
 import os
+import time
 from pathlib import Path
 import tempfile
 
@@ -22,7 +22,11 @@ st.title('VidWise 🎥')
 st.header('Powered by Google Gemini 1.5 Flash and PhiData')
 
 
-st.subheader("Set Your Google API Key")
+if 'GOOGLE_API_KEY' not in st.session_state:
+
+    st.session_state.GOOGLE_API_KEY = None
+
+
 
 api_key_input = st.text_input(
     "Enter your Google API Key:", 
@@ -38,8 +42,14 @@ if st.button("Set API Key"):
         try:
 
             os.environ["GOOGLE_API_KEY"] = api_key_input
+            
+
+            st.session_state.GOOGLE_API_KEY = api_key_input
+            
 
             genai.configure(api_key=api_key_input)
+
+            st.cache_data.clear()
 
             st.success("API Key set successfully!")
 
@@ -49,14 +59,15 @@ if st.button("Set API Key"):
 
     else:
 
-        st.warning("Please enter a valid API Key.")
+        st.warning('No Gemini API key found. Please set your API key in order to proceed further')
 
 
 
-if os.getenv("GOOGLE_API_KEY"):
+if st.session_state.GOOGLE_API_KEY:
 
     @st.cache_resource
     def initialize_agent():
+
         return Agent(
             name='Video AI Analyzer',
             model=Gemini(id='gemini-1.5-flash'),
@@ -152,4 +163,3 @@ if os.getenv("GOOGLE_API_KEY"):
 else:
 
     st.info("Please set your Google API Key to proceed.")
-    
