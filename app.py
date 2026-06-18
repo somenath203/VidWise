@@ -1,7 +1,6 @@
 import streamlit as st 
 from phi.agent import Agent 
 from phi.model.google import Gemini 
-from phi.tools.duckduckgo import DuckDuckGo
 from google.generativeai import upload_file, get_file
 import google.generativeai as genai
 import os
@@ -70,8 +69,8 @@ if st.session_state.GOOGLE_API_KEY:
 
         return Agent(
             name='Video AI Analyzer',
-            model=Gemini(id='gemini-1.5-flash'),
-            tools=[DuckDuckGo()],
+            model=Gemini(id='gemini-3.1-flash-lite'),
+            tools=[],
             markdown=True
         )
 
